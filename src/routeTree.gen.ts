@@ -9,38 +9,118 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
+import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
+import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSigninRoute = AuthSigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/signin': typeof AuthSigninRoute
+  '/signup': typeof AuthSignupRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/signin': typeof AuthSigninRoute
+  '/signup': typeof AuthSignupRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
+  '/_auth/signin': typeof AuthSigninRoute
+  '/_auth/signup': typeof AuthSignupRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/signin'
+    | '/signup'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/signin'
+    | '/signup'
+    | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_auth/forgot-password'
+    | '/_auth/reset-password'
+    | '/_auth/signin'
+    | '/_auth/signup'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +128,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/signup': {
+      id: '/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/signin': {
+      id: '/_auth/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof AuthSigninRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthSigninRoute: typeof AuthSigninRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthSigninRoute: AuthSigninRoute,
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
