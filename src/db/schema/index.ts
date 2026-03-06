@@ -1,1 +1,1 @@
-export { user, session, account, verification, userRelations, sessionRelations, accountRelations } from "./auth";
+export { users, sessions, accounts, verifications, userRelations, sessionRelations, accountRelations } from "./auth";

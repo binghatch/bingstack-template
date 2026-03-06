@@ -1,9 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { GalleryVerticalEnd } from 'lucide-react'
+import { SignupForm } from '@/features/auth/components/signup-form'
 
 export const Route = createFileRoute('/_auth/signup')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/_auth/signup"!</div>
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-6">
+      <a href="#" className="flex items-center gap-2 self-center font-medium">
+        <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        Logistry.app
+      </a>
+      <SignupForm />
+    </div>
+  )
 }
