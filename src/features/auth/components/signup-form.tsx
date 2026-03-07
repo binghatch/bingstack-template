@@ -1,7 +1,7 @@
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ROUTES } from "routes";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -36,6 +36,7 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -47,7 +48,7 @@ export function SignupForm({
       onSubmit: formSchema
     },
     onSubmit: async ({ value }) => {
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         email: value.email,
         password: value.password,
         name: `${value.fullName}`,
@@ -58,8 +59,7 @@ export function SignupForm({
         return
       }
 
-      toast.success("Account created!")
-      console.log(data);
+      navigate({ to: ROUTES.VERIFY_EMAIL });
     },
   })
 

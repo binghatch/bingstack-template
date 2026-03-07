@@ -1,6 +1,14 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { ROUTES } from "routes";
+import { getSession } from "@/lib/session";
 
 export const Route = createFileRoute("/_auth")({
+  beforeLoad: async () => {
+    const session = await getSession();
+    if (session) {
+      throw redirect({ to: ROUTES.WORKSPACE });
+    }
+  },
   component: AuthLayout,
 });
 
